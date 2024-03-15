@@ -25,5 +25,11 @@ public class Libro extends CatalogoItem implements Serializable{
     public void setGenere(String genere) {
         this.genere = genere;
     }
+    @Override
+    public String toString() {
+        return String.format("Libro{titolo='%s', autore='%s', isbn='%s', annoPubblicazione=%d, numeroPagine=%d, genere='%s'}",
+                getTitolo(), getAutore(), getIsbn(), getAnnoPubblicazione(), getNumeroPagine(), getGenere());
+    }
+
 }
 

@@ -56,8 +56,9 @@ public class Application {
         }
 
         // Stampa il catalogo
-        System.out.println("Catalogo completo:");
-        catalogo.getItems().forEach(item -> System.out.println(item.getTitolo()));
+        System.out.println("\nCatalogo completo:");
+        catalogo.getItems().forEach(System.out::println);
+
     }
 
     private static void aggiungiElementiFissi(Catalogo catalogo) {

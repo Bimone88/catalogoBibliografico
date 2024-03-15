@@ -16,5 +16,15 @@ public class Rivista extends CatalogoItem implements Serializable{
     public void setPeriodicita(Periodicita periodicita) {
         this.periodicita = periodicita;
     }
+    @Override
+    public String toString() {
+        return String.format("Rivista{periodicita=%s, isbn='%s', titolo='%s', annoPubblicazione=%d, numeroPagine=%d}",
+                getPeriodicita().name(), getIsbn(), getTitolo(), getAnnoPubblicazione(), getNumeroPagine());
+    }
+
+
+
+
+
 }
 
