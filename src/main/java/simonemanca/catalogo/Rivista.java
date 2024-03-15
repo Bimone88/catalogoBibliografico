@@ -1,6 +1,6 @@
 package simonemanca.catalogo;
-
-public class Rivista extends CatalogoItem {
+import java.io.Serializable;
+public class Rivista extends CatalogoItem implements Serializable{
     public enum Periodicita { SETTIMANALE, MENSILE, SEMESTRALE }
     private Periodicita periodicita;
 

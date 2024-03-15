@@ -14,6 +14,13 @@ public class Application {
         // creo il catalogo dopo che ci ho creato una Classe
         Catalogo catalogo = new Catalogo();
 
+        //libro che aggiungo al catalogo per dei processi di salvataggio su fisco:
+        catalogo.aggiungiElemento(new Libro("123-456-789", "Il Signore degli Anelli", 1954, 1178, "J.R.R. Tolkien", "Fantasy"));
+
+        //rivista che aggiungo al catalogo per medesimo motivo.:
+        catalogo.aggiungiElemento(new Rivista("987-654-321", "National Geographic", 2020, 150, Rivista.Periodicita.MENSILE));
+        
+
         // ciclo for per creazione di libri, che faccio 10
         int numberOfBooks = 10;
         List<Libro> books = new ArrayList<>();

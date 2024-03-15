@@ -1,6 +1,6 @@
 package simonemanca.catalogo;
-
-public abstract class CatalogoItem {
+import java.io.Serializable;
+public abstract class CatalogoItem implements Serializable{
     //attributi per elementi del catalogo:
     protected String isbn;
     protected String titolo;

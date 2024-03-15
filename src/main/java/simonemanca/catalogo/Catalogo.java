@@ -1,11 +1,12 @@
 package simonemanca.catalogo;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Catalogo {
+public class Catalogo implements Serializable{
     private List<CatalogoItem> items = new ArrayList<>();
 
     // Metodo per aggiungere un elemento al catalogo
@@ -46,5 +47,20 @@ public class Catalogo {
     public List<CatalogoItem> getItems() {
         return new ArrayList<>(items);
     }
+
+    // Metodo per salvare il catalogo su disco
+    public void salvaSuDisco(String percorsoFile) throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(percorsoFile))) {
+            out.writeObject(items);
+        } // Il try-with-resources chiuderà automaticamente il flusso di output
+    }
+
+    // Metodo per caricare il catalogo da disco
+    public void caricaDaDisco(String percorsoFile) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(percorsoFile))) {
+            items = (List<CatalogoItem>) in.readObject();
+        } // Il try-with-resources chiuderà automaticamente il flusso di input
+    }
 }
+
 

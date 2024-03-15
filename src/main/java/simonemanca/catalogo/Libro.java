@@ -1,6 +1,6 @@
 package simonemanca.catalogo;
-
-public class Libro extends CatalogoItem {
+import java.io.Serializable;
+public class Libro extends CatalogoItem implements Serializable{
     private String autore;
     private String genere;
 
