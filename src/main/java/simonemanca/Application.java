@@ -3,10 +3,9 @@ package simonemanca;
 import simonemanca.catalogo.*;
 import com.github.javafaker.Faker;
 import java.io.IOException;
-//import java.util.ArrayList;
-//import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+
 public class Application {
     public static void main(String[] args) {
         // Crea un'istanza di Faker per l'italianità
@@ -14,37 +13,16 @@ public class Application {
 
         // Creo il catalogo
         Catalogo catalogo = new Catalogo();
-        Scanner scanner = new Scanner(System.in);
+
         // Aggiungo elementi fissi per mantenere consistenza tra le esecuzioni
         aggiungiElementiFissi(catalogo);
 
         // Aggiungo alcuni elementi generati da Faker per varietà
         aggiungiElementiVari(catalogo, faker);
-        boolean continua = true;
-        while (continua) {
-            System.out.println("\nGestione Catalogo");
-            System.out.println("1. Visualizza Catalogo");
-            System.out.println("2. Esci");
-            System.out.print("Scegli un'opzione: ");
-            int scelta = scanner.nextInt();
 
-            switch (scelta) {
-                case 1:
-                    // Stampa il catalogo
-                    System.out.println("\nCatalogo completo:");
-                    catalogo.getItems().forEach(item -> System.out.println(item.getTitolo()));
-                    break;
-                case 2:
-                    System.out.println("Uscita...");
-                    continua = false;
-                    break;
-                default:
-                    System.out.println("Scelta non valida. Riprova.");
-                    break;
-            }
-        }
-
-        scanner.close();
+        // Stampa il catalogo prima del salvataggio su disco
+        System.out.println("Catalogo prima del salvataggio:");
+        catalogo.getItems().forEach(System.out::println);
 
         // Prova a salvare il catalogo su disco
         try {
@@ -55,11 +33,48 @@ public class Application {
             e.printStackTrace();
         }
 
-        // Stampa il catalogo
-        System.out.println("\nCatalogo completo:");
-        catalogo.getItems().forEach(System.out::println);
+        // Interazione con l'utente tramite console
+        Scanner scanner = new Scanner(System.in);
+        boolean continua = true;
+        while (continua) {
+            System.out.println("\nGestione Catalogo");
+            System.out.println("1. Visualizza Catalogo");
+            System.out.println("2. Carica Catalogo da Disco");
+            System.out.println("3. Esci");
+            System.out.print("Scegli un'opzione: ");
+            int scelta = scanner.nextInt();
 
+            switch (scelta) {
+                case 1:
+                    // Stampa il catalogo
+                    System.out.println("\nCatalogo completo:");
+                    catalogo.getItems().forEach(System.out::println);
+                    break;
+                case 2:
+                    // Carica il catalogo da disco e stampa
+                    try {
+                        catalogo.caricaDaDisco("catalogo.ser");
+                        System.out.println("Catalogo caricato da disco con successo.");
+                        System.out.println("Catalogo dopo il caricamento da disco:");
+                        catalogo.getItems().forEach(System.out::println);
+                    } catch (IOException | ClassNotFoundException e) {
+                        System.err.println("Errore durante il caricamento del catalogo: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    break;
+                case 3:
+                    System.out.println("Uscita...");
+                    continua = false;
+                    break;
+                default:
+                    System.out.println("Scelta non valida. Riprova.");
+                    break;
+            }
+        }
+        scanner.close();
     }
+
+
 
     private static void aggiungiElementiFissi(Catalogo catalogo) {
         // Esempi di dati fissi
