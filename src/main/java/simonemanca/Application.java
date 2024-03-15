@@ -2,44 +2,51 @@ package simonemanca;
 
 import simonemanca.catalogo.*;
 import com.github.javafaker.Faker;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 import java.util.Locale;
-
+import java.util.Scanner;
 public class Application {
     public static void main(String[] args) {
-        Faker faker = new Faker(new Locale("it")); // Crea un'istanza con fraker per l'italianità
+        // Crea un'istanza di Faker per l'italianità
+        Faker faker = new Faker(new Locale("it"));
 
-        // creo il catalogo dopo che ci ho creato una Classe
+        // Creo il catalogo
         Catalogo catalogo = new Catalogo();
+        Scanner scanner = new Scanner(System.in);
+        // Aggiungo elementi fissi per mantenere consistenza tra le esecuzioni
+        aggiungiElementiFissi(catalogo);
 
-        //libro che aggiungo al catalogo per dei processi di salvataggio su fisco:
-        catalogo.aggiungiElemento(new Libro("123-456-789", "Il Signore degli Anelli", 1954, 1178, "J.R.R. Tolkien", "Fantasy"));
+        // Aggiungo alcuni elementi generati da Faker per varietà
+        aggiungiElementiVari(catalogo, faker);
+        boolean continua = true;
+        while (continua) {
+            System.out.println("\nGestione Catalogo");
+            System.out.println("1. Visualizza Catalogo");
+            System.out.println("2. Esci");
+            System.out.print("Scegli un'opzione: ");
+            int scelta = scanner.nextInt();
 
-        //rivista che aggiungo al catalogo per medesimo motivo.:
-        catalogo.aggiungiElemento(new Rivista("987-654-321", "National Geographic", 2020, 150, Rivista.Periodicita.MENSILE));
-
-
-
-
-        // ciclo for per creazione di libri, che faccio 10
-        int numberOfBooks = 10;
-        List<Libro> books = new ArrayList<>();
-        for (int i = 0; i < numberOfBooks; i++) {
-            //oggetto libro con dati fittizi
-            Libro book = new Libro(
-                    faker.code().isbn13(), // Genera un ISBN fittizio
-                    faker.book().title(), // Genera un titolo fittizio
-                    faker.number().numberBetween(1900, 2021), // Genera un anno di pubblicazione compreso tra 1900 e 2021
-                    faker.number().numberBetween(100, 1000), // Genera un numero di pagine compreso tra 100 e 1000
-                    faker.book().author(), // Genera un nome di autore fittizio
-                    faker.book().genre() // Genera un genere fittizio
-            );
-          catalogo.aggiungiElemento(book);
-            //  books.add(book); // Aggiunge il libro fittizio alla lista
+            switch (scelta) {
+                case 1:
+                    // Stampa il catalogo
+                    System.out.println("\nCatalogo completo:");
+                    catalogo.getItems().forEach(item -> System.out.println(item.getTitolo()));
+                    break;
+                case 2:
+                    System.out.println("Uscita...");
+                    continua = false;
+                    break;
+                default:
+                    System.out.println("Scelta non valida. Riprova.");
+                    break;
+            }
         }
+
+        scanner.close();
+
+        // Prova a salvare il catalogo su disco
         try {
             catalogo.salvaSuDisco("catalogo.ser");
             System.out.println("Catalogo salvato con successo.");
@@ -47,49 +54,44 @@ public class Application {
             System.err.println("Errore durante il salvataggio del catalogo: " + e.getMessage());
             e.printStackTrace();
         }
-        // Ciclo per stampare dettagli dei libri fittizi
-        catalogo.getItems().forEach(item -> {
-            if (item instanceof Libro) {
-                Libro book = (Libro) item;
-                System.out.println("Libro: " + book.getTitolo() + ", Autore: " + book.getAutore() + ", ISBN: " + book.getIsbn());
-            }
-        });
-        // ciclo per stampare dettagli dei libri che ho creato con il ciclo di prima:
-        for (Libro book : books) {
-            System.out.println("Libro: " + book.getTitolo() + ", Autore: " + book.getAutore() + ", ISBN: " + book.getIsbn());
-        }
 
-        // enum periodicita
-        Rivista.Periodicita periodicita = Rivista.Periodicita.values()[faker.number().numberBetween(0, Rivista.Periodicita.values().length)];
-        // Creazione di un oggetto Rivista con dati fittizi
-        Rivista fakeMagazine = new Rivista(
-                faker.code().isbn13(),
-                faker.book().title(),
-                faker.number().numberBetween(1900, 2021),
-                faker.number().numberBetween(20, 100),
-                Rivista.Periodicita.values()[faker.number().numberBetween(0, Rivista.Periodicita.values().length)]
-        );
-        catalogo.aggiungiElemento(fakeMagazine);
-
-        // Cerca un libro per ISBN
-        String isbnDaCercare = catalogo.getItems().get(0).getIsbn(); // Prende un ISBN a caso dal catalogo
-        CatalogoItem itemTrovato = catalogo.cercaPerIsbn(isbnDaCercare);
-        System.out.println("Elemento trovato per ISBN: " + isbnDaCercare + " - " + itemTrovato.getTitolo());
-
-        // remove per rimuoveere un libro dal catalogo usando l'ISBN
-        boolean rimosso = catalogo.rimuoviElementoPerIsbn(isbnDaCercare);
-        System.out.println("Libro rimosso: " + rimosso);
-
-        // Cerca tutti i libri della J. K. ROWLING:
-        String autoreDaCercare = "J. K. Rowling";
-        List<Libro> libriDellAutore = catalogo.cercaLibriPerAutore(autoreDaCercare);
-        System.out.println("Libri trovati dell'autore " + autoreDaCercare + ": " + libriDellAutore.size());
-
-        // Stampa tutto il catalogo
+        // Stampa il catalogo
         System.out.println("Catalogo completo:");
         catalogo.getItems().forEach(item -> System.out.println(item.getTitolo()));
     }
+
+    private static void aggiungiElementiFissi(Catalogo catalogo) {
+        // Esempi di dati fissi
+        catalogo.aggiungiElemento(new Libro("123-456-789", "Le avventure di Byte", 2000, 300, "Coder Anonimo", "Informatica"));
+        catalogo.aggiungiElemento(new Rivista("987-654-321", "Misteri dell'Informatica", 2020, 50, Rivista.Periodicita.MENSILE));
     }
+
+    private static void aggiungiElementiVari(Catalogo catalogo, Faker faker) {
+        // Questo ciclo aggiunge 10 libri con dati generati casualmente
+        for (int i = 0; i < 10; i++) {
+            catalogo.aggiungiElemento(new Libro(
+                    faker.code().isbn13(),
+                    faker.book().title(),
+                    faker.number().numberBetween(1900, 2021),
+                    faker.number().numberBetween(100, 1000),
+                    faker.book().author(),
+                    faker.book().genre()
+            ));
+        }
+
+        // posso aggiungere riviste con Faker
+        // esempio:
+        for (int i = 0; i < 5; i++) {
+            catalogo.aggiungiElemento(new Rivista(
+                    faker.code().isbn13(),
+                    faker.company().name(),
+                    faker.number().numberBetween(1900, 2021),
+                    faker.number().numberBetween(20, 100),
+                    Rivista.Periodicita.values()[faker.random().nextInt(Rivista.Periodicita.values().length)]
+            ));
+        }
+    }
+}
 
 
 
