@@ -3,6 +3,7 @@ package simonemanca;
 import simonemanca.catalogo.*;
 import com.github.javafaker.Faker;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -19,7 +20,9 @@ public class Application {
 
         //rivista che aggiungo al catalogo per medesimo motivo.:
         catalogo.aggiungiElemento(new Rivista("987-654-321", "National Geographic", 2020, 150, Rivista.Periodicita.MENSILE));
-        
+
+
+
 
         // ciclo for per creazione di libri, che faccio 10
         int numberOfBooks = 10;
@@ -37,7 +40,20 @@ public class Application {
           catalogo.aggiungiElemento(book);
             //  books.add(book); // Aggiunge il libro fittizio alla lista
         }
-
+        try {
+            catalogo.salvaSuDisco("catalogo.ser");
+            System.out.println("Catalogo salvato con successo.");
+        } catch (IOException e) {
+            System.err.println("Errore durante il salvataggio del catalogo: " + e.getMessage());
+            e.printStackTrace();
+        }
+        // Ciclo per stampare dettagli dei libri fittizi
+        catalogo.getItems().forEach(item -> {
+            if (item instanceof Libro) {
+                Libro book = (Libro) item;
+                System.out.println("Libro: " + book.getTitolo() + ", Autore: " + book.getAutore() + ", ISBN: " + book.getIsbn());
+            }
+        });
         // ciclo per stampare dettagli dei libri che ho creato con il ciclo di prima:
         for (Libro book : books) {
             System.out.println("Libro: " + book.getTitolo() + ", Autore: " + book.getAutore() + ", ISBN: " + book.getIsbn());
