@@ -5,7 +5,7 @@ public class Libro extends CatalogoItem {
     private String genere;
 
     public Libro(String isbn, String titolo, int annoPubblicazione, int numeroPagine, String autore, String genere) {
-        super(isbn, titolo, annoPubblicazione, numeroPagine);
+        super(isbn, titolo, annoPubblicazione, numeroPagine); // con SUPER chiamo il costruttore della supercalsse
         this.autore = autore;
         this.genere = genere;
     }

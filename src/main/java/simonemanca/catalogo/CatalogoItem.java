@@ -1,18 +1,21 @@
 package simonemanca.catalogo;
 
 public abstract class CatalogoItem {
+    //attributi per elementi del catalogo:
     protected String isbn;
     protected String titolo;
     protected int annoPubblicazione;
     protected int numeroPagine;
 
+    // Costruttore per inizializzare un oggetto CatalogoItem
     public CatalogoItem(String isbn, String titolo, int annoPubblicazione, int numeroPagine) {
+
         this.isbn = isbn;
         this.titolo = titolo;
         this.annoPubblicazione = annoPubblicazione;
         this.numeroPagine = numeroPagine;
     }
-
+//GETTERS :&SETTERSSS:
     public String getIsbn() {
         return isbn;
     }
